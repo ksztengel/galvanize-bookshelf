@@ -30,7 +30,8 @@
     "humps": "^1.1.0",
     "knex": "^0.11.7",
     "morgan": "^1.7.0",
-    "pg": "^6.0.0"
+    "pg": "^6.0.0",
+    "require-json-ex": "^1.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",

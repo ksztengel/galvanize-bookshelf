@@ -106,7 +106,8 @@ suite('part2 routes', () => {
         coverUrl: 'http://akamaicovers.oreilly.com/images/0636920032977/lrg.jpg',
         createdAt: '2016-06-26T14:26:16.000Z',
         updatedAt: '2016-06-26T14:26:16.000Z'
-      }], done);
+      }], done) 
+      ;
 
       /* eslint-enable max-len */
   });

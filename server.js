@@ -37,23 +37,23 @@ const path = require('path');
 app.use(express.static(path.join('public')));
 
 // CSRF protection
-app.use((req, res, next) => {
-  if (/json/.test(req.get('Accept'))) {
-    return next();
-  }
-
-  res.sendStatus(406);
-});
+// app.use((req, res, next) => {
+//   if (/json/.test(req.get('Accept'))) {
+//     return next();
+//   }
+//
+//   res.sendStatus(406);
+// });
 
 const books = require('./routes/books');
 const favorites = require('./routes/favorites');
 const session = require('./routes/session');
 const users = require('./routes/users');
 
-app.use(books);
-app.use(favorites);
-app.use(session);
-app.use(users);
+app.use('/books',books);
+app.use('/favorites',favorites);
+app.use('/session',session);
+app.use('/users',users);
 
 app.use((_req, res) => {
   res.sendStatus(404);

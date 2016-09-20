@@ -9,6 +9,7 @@ exports.up = function(knex) {
     table.text('description').notNullable().defaultTo('');
     table.text('cover_url').notNullable().defaultTo('');
     table.timestamps(true, true);
+    
   });
 };
 
