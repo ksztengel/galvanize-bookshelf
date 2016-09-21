@@ -47,16 +47,12 @@ router.post('/', (req, res, next) => {
         description: req.body.description,
         cover_url: req.body.coverUrl
     }
-    // res.set('Content-Type', 'application/json')
     knex(`books`).insert(humps.decamelizeKeys(insertBook), `id`).then((num) => {
       const id = num[0];
     knex('books')
-        // .insert(humps.decamelizeKeys(insertBook))
-        // .then(() => {
             .where(`id`, id).first().then((insertBook)=>{
             res.json(humps.camelizeKeys(insertBook))
         })
-      // })
     })
         .catch((err) => {
             next(err);
@@ -69,51 +65,40 @@ router.patch('/:id', (req, res, next) => {
         author: req.body.author,
         genre: req.body.genre,
         description: req.body.description,
-        cover_url: req.body.cover_url
+        cover_url: req.body.coverUrl
     }
-    console.log("inserting...", updateBook)
-
+    knex(`books`)
+    .update(humps.decamelizeKeys(updateBook), '*').then((book) => {
     knex('books')
-        .where('books.id', req.params.id)
-        .first()
-        .then((book) => {
-            if (!book) {
-                return next();
-            }
-
-            return knex('books')
-                .update(updateBook)
-                .where('books.id', req.params.id);
+            .where(`id`, book[0].id).first().then((newBook)=>{
+            res.json(humps.camelizeKeys(newBook))
         })
-        .then((books) => {
-            res.redirect('/');
-            // res.send(books[0]);
-        })
+    })
         .catch((err) => {
             next(err);
         });
 });
 
-router.delete('/:id', (req, res, next) => {
-    knex('books')
-        .where('books.id', req.params.id)
-        .first()
-        .then((row) => {
-            if (!row) {
-                return next();
-            }
-            book = row;
-            return knex('book')
-                .del()
-                .where('book.id', req.params.id);
-        })
-        .then(() => {
-            delete book.id;
-            res.send(book);
-        })
-        .catch((err) => {
-            next(err);
-        });
-});
+// router.delete('/:id', (req, res, next) => {
+//     knex('books')
+//         .where('books.id', req.params.id)
+//         .first()
+//         .then((row) => {
+//             if (!row) {
+//                 return next();
+//             }
+//             book = row;
+//             return knex('book')
+//                 .del()
+//                 .where('book.id', req.params.id);
+//         })
+//         .then(() => {
+//             delete book.id;
+//             res.send(book);
+//         })
+//         .catch((err) => {
+//             next(err);
+//         });
+// });
 
 module.exports = router;
