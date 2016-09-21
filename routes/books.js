@@ -39,7 +39,7 @@ router.get('/:id', (req, res, next) => {
 //     });
 //   });
 // });
-router.post('/books', (req, res, next) => {
+router.post('/', (req, res, next) => {
     let insertBook = {
         title: req.body.title,
         author: req.body.author,
@@ -47,7 +47,7 @@ router.post('/books', (req, res, next) => {
         description: req.body.description,
         cover_url: req.body.coverUrl
     }
-    res.set('Content-Type', 'application/json')
+    // res.set('Content-Type', 'application/json')
     knex(`books`).insert(humps.decamelizeKeys(insertBook), `id`).then((num) => {
       const id = num[0];
     knex('books')
@@ -72,7 +72,7 @@ router.patch('/:id', (req, res, next) => {
         cover_url: req.body.cover_url
     }
     console.log("inserting...", updateBook)
-    res.set('Content-Type', 'application/json')
+
     knex('books')
         .where('books.id', req.params.id)
         .first()
@@ -95,7 +95,6 @@ router.patch('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-    res.set('Content-Type', 'application/json') 
     knex('books')
         .where('books.id', req.params.id)
         .first()
@@ -103,15 +102,14 @@ router.delete('/:id', (req, res, next) => {
             if (!row) {
                 return next();
             }
-            let book = row;
-            return knex('books')
+            book = row;
+            return knex('book')
                 .del()
-                .where('books.id', req.params.id);
+                .where('book.id', req.params.id);
         })
         .then(() => {
-            delete books.id;
-            // res.redirect('/');
-            res.send(books);
+            delete book.id;
+            res.send(book);
         })
         .catch((err) => {
             next(err);
