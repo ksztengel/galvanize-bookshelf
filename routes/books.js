@@ -72,11 +72,11 @@ router.patch('/:id', (req, res, next) => {
         });
 });
 router.delete('/:id', (req, res, next) => {
-  const id = Number.parseInt(req.params.id);
-if (Number.isNaN(id)) {
-  return next();
-}
-  let book;
+    const id = Number.parseInt(req.params.id);
+    if (Number.isNaN(id)) {
+        return next();
+    }
+    let book;
     knex('books')
         .where('id', id)
         .first()

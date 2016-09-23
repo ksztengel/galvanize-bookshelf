@@ -1,10 +1,17 @@
 'use strict';
 
 const express = require('express');
-
-// eslint-disable-next-line new-cap
 const router = express.Router();
+const knex = require('../knex');
+const humps = require('humps');
+const bcrypt = require('bcrypt');
+const boom = require('boom');
 
-// YOUR CODE HERE
-
+router.get('/favorites', function(req, res, next) {
+    if (req.session.userInfo) {
+        res.send(true)
+    } else {
+        res.send(false)
+    }
+})
 module.exports = router;

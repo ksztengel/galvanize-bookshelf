@@ -30,11 +30,10 @@ router.post('/', (req, res, next) => {
                   delete user.hashedPassword
                     req.session.userInfo = newObjUser
                     res.json(user)
-                    // redirect('/')
                 })
         })
         .catch((err) => {
-            next(err);
-        });
+    next(err);
+});
 });
 module.exports = router;
