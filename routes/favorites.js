@@ -7,9 +7,14 @@ const humps = require('humps');
 const bcrypt = require('bcrypt');
 const boom = require('boom');
 
-const authorize = function()
+const authorize = function(req, res, next){
+  if (!req.session.userInfo){
+    throw boom.create(401,'Unauthorized')
+  }
+  next()
+}
 
-router.get('/', (req, res, next) => {
+router.get('/', authorize, (req, res, next) => {
     knex('favorites')
         .innerJoin('books', 'books.id', 'favorites.book_id')
         .where('user_id', req.session.userInfo.id)
@@ -22,7 +27,7 @@ router.get('/', (req, res, next) => {
         });
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', authorize, (req, res, next) => {
     knex('favorites')
         .innerJoin('books', 'books.id', 'favorites.book_id')
         .where('user_id', req.session.userInfo.id)
