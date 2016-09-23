@@ -27,7 +27,6 @@ router.post('/', function(req, res, next) {
             {
                 var user = results
                 var passwordMatch = bcrypt.compareSync(req.body.password, user.hashed_password)
-                console.log(passwordMatch);
                 if (passwordMatch == false) {
                     throw boom.create(400, 'Bad email or password')
                 } else {
