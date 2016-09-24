@@ -81,7 +81,6 @@ router.delete('/', authorize, (req, res, next) => {
         user_id: userId
     }
     delFav = humps.decamelizeKeys(delFav)
-    console.log(delFav);
     let favorite;
     knex('favorites')
         .where(delFav)
