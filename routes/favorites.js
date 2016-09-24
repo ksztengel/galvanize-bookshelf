@@ -28,16 +28,19 @@ router.get('/', authorize, (req, res, next) => {
 });
 
 router.get('/:id', authorize, (req, res, next) => {
-    knex('favorites')
-        .innerJoin('books', 'books.id', 'favorites.book_id')
-        .where('user_id', req.session.userInfo.id)
+    knex('books')
+        .innerJoin('favorites', 'favorites.book_id', 'books.id')
+        .where({
+            'favorites.book_id': req.query.bookId,
+            'user_id': req.session.userInfo.id
+        })
         .first()
         .then((row) => {
             if (row) {
-                res.send(true);
+                return res.send(true);
             } else {
 
-               res.send(false);
+                res.send(false);
             }
         })
         .catch((err) => {
@@ -56,7 +59,7 @@ router.post('/', authorize, (req, res, next) => {
 
     .then((books) => {
             const favorite = humps.camelizeKeys(books[0])
-            console.log(books[0]);
+
             res.send(favorite)
         })
         .catch((err) => {
@@ -64,6 +67,41 @@ router.post('/', authorize, (req, res, next) => {
         })
 })
 
-
+router.delete('/', authorize, (req, res, next) => {
+    const bookId = Number.parseInt(req.body.bookId);
+    if (Number.isNaN(bookId)) {
+        return next();
+    }
+    const userId = Number.parseInt(req.session.userInfo.id);
+    if (Number.isNaN(userId)) {
+        return next();
+    }
+    let delFav = {
+        book_id: bookId,
+        user_id: userId
+    }
+    delFav = humps.decamelizeKeys(delFav)
+    console.log(delFav);
+    let favorite;
+    knex('favorites')
+        .where(delFav)
+        .first()
+        .then((row) => {
+            if (!row) {
+                throw boom.create(404, 'Favorite not found');
+            }
+            favorite = humps.camelizeKeys(row)
+            return knex('favorites')
+                .del()
+                .where('id', favorite.id)
+        })
+        .then(() => {
+            delete favorite.id;
+            res.send(favorite);
+        })
+        .catch((err) => {
+            next(err);
+        });
+})
 
 module.exports = router;
